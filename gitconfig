@@ -1,0 +1,18 @@
+[user]
+	name = Dave Baird
+	email = dave@zerofive.co.uk
+[core]
+	fileMode = false
+	filemode = false
+[color]
+	status = auto
+	branch = auto
+	interactive = auto
+	diff = auto
+[alias]
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	st = status
+	p = push origin master
+	plive = push live master
+	pbeta = push beta master

@@ -1,0 +1,31 @@
+#!/bin/bash
+
+_err () {
+    echo "$1" >&2
+    exit $2
+}
+
+[[ -z "$1" ]] && _err "Need to specify one of: all gitdave git docker bashrc"
+
+if [[ $1 == all ]]; then
+    dotfiles="bashrc git-prompt.sh git-completion.sh gitconfig dockerfunc "
+elif [[ $1 == gitdave ]]; then 
+    dotfiles="bashrc git-prompt.sh git-completion.sh gitconfig"
+elif [[ $1 == git ]]; then 
+    dotfiles="bashrc git-prompt.sh git-completion.sh"
+elif [[ $1 == docker ]]; then 
+    dotfiles="bashrc dockerfunc"
+elif [[ $1 == bashrc ]]; then
+    dotfiles="bashrc"
+fi
+
+for dotfile in $dotfiles; do 
+    if [[ -f "$HOME/.$dotfile" ]] && [[ -r "$HOME/.$dotfile" ]]; then
+        ts=$(date +"%Y-%m-%d_%H-%M-%S")
+        mv "$HOME/.$dotfile" "$HOME/.$dotfile.$ts" || _err "Couldn't mv $HOME/.$dotfile $HOME/.$dotfile.$ts: $?" $?
+    fi
+
+    cp "$dotfile" "$HOME/.$dotfile" || _err "Couldn't cp $dotfile $HOME/.$dotfile: $?"
+    chmod 644 "$HOME/.$dotfile"
+done 
+

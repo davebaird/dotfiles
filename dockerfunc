@@ -1,0 +1,36 @@
+# shellcheck shell=bash
+
+dbuild () {
+
+    if [[ -r "Dockerfile" ]] && [[ -f "Dockerfile" ]];
+    then
+        name=${PWD##*/}
+        echo "Building Docker image '$name'"
+        docker build -t "$name" .
+    else
+        echo "Error: no Dockerfile here"
+    fi
+}
+
+# also: docker system prune
+dcleanup () {
+	local containers
+	mapfile -t containers < <(docker ps -aq 2>/dev/null)
+	docker rm "${containers[@]}" 2>/dev/null
+	local volumes
+	mapfile -t volumes < <(docker ps --filter status=exited -q 2>/dev/null)
+	docker rm -v "${volumes[@]}" 2>/dev/null
+	local images
+	mapfile -t images < <(docker images --filter dangling=true -q 2>/dev/null)
+	docker rmi "${images[@]}" 2>/dev/null
+}
+
+dstop () {
+    local containers
+	mapfile -t containers < <(docker ps -q 2>/dev/null)
+    docker stop "${containers[@]}"
+}
+
+dvolumes () {
+    docker ps -a --format '{{ .ID }}' | xargs -I {} docker inspect -f '{{ .Name }}{{ printf "\n" }}{{ range .Mounts }}{{ printf "\n\t" }}{{ .Type }} {{ if eq .Type "bind" }}{{ .Source }}{{ end }}{{ .Name }} => {{ .Destination }}{{ end }}{{ printf "\n" }}' {}
+}
