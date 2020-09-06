@@ -4,9 +4,10 @@ set -e
 # https://www.linode.com/docs/development/perl/manage-cpan-modules-with-cpan-minus/
 
 sudo apt-get update
-sudo apt-get install build-essential libssl-dev
+sudo apt-get install curl build-essential libssl-dev
 
 curl -L https://cpanmin.us | perl - --sudo App::cpanminus
+
 cpanm --self-upgrade --sudo
 
 cpanm --local-lib=~/perl5 local::lib
