@@ -2,6 +2,9 @@
 # shellcheck shell=bash
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
+# shellcheck disable=SC2046
+eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
+
 for dotfile in "$HOME/.git-prompt.sh" "$HOME/.git-completion.sh" "$HOME/.dockerfunc"; do 
   if [[ -f $dotfile ]] && [[ -r $dotfile ]]; then
         # shellcheck source=/dev/null
@@ -77,6 +80,9 @@ alias st='stat -c "%A (%a) %8s %.19y %n"'
 alias tree='tree --charset=ASCII'
 
 git-new-empty-repo () {
+    echo "git-new-empty-repo is broken, but useful" >&2
+    exit 1
+
     mkdir "$1"
 
     (
@@ -97,6 +103,13 @@ git-new-empty-repo () {
 git-cmp-remote () {
     git fetch origin master
     git diff --summary FETCH_HEAD
+}
+
+git3 () {
+    local logmsg; logmsg=${1-No log message supplied}
+    git add .
+    git commit -m "$logmsg"
+    git push origin master
 }
 
 
