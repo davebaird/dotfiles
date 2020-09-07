@@ -50,9 +50,12 @@ if [ $UID -eq 0 ]; then
     alias mv='mv -i'
 
     alias ls='/bin/ls -a'
-else
+elif [ $USER -eq 'dave' ]; then
     SYM='$'
     PROMPTCOLOUR=${YELLOW}
+else
+    SYM='$'
+    PROMPTCOLOUR=${GREEN}
 fi
 
 export LS_OPTIONS='--color=auto'
