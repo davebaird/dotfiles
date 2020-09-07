@@ -1,6 +1,8 @@
 #!/usr/bin/bash
 set -e
 
+[[ $EUID == 0 ]] && exit 0
+
 # https://www.linode.com/docs/development/perl/manage-cpan-modules-with-cpan-minus/
 
 sudo apt-get update
