@@ -3,7 +3,7 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
 # shellcheck disable=SC2046
-eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
+[[ $EUID != 0 ]] && eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 
 for dotfile in "$HOME/.git-prompt.sh" "$HOME/.git-completion.sh" "$HOME/.dockerfunc"; do 
   if [[ -f $dotfile ]] && [[ -r $dotfile ]]; then
