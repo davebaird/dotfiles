@@ -111,12 +111,10 @@ git-cmp-remote () {
 }
 
 git3 () {
-    set -e
     local logmsg; logmsg=${1-No log message supplied}
-    git add .
-    git commit -m "$logmsg"
-    git push origin master
-    set +e
+    git add .               || return $?
+    git commit -m "$logmsg" || return $?
+    git push origin master  || return $?
 }
 
 
