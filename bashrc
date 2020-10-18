@@ -123,6 +123,7 @@ git3- () {
         if [[ -d "$d" ]]; then
             (
                 cd "$d" || return 1
+                echo "Committing $d" >&2
                 git3 "$logmsg"
             )
         fi
