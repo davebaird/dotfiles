@@ -130,6 +130,17 @@ git3- () {
     done
 }
 
+gitp- () {
+    for d in "$PWD"/*; do
+        if [[ -d "$d" ]]; then
+            (
+                cd "$d" || return 1
+                git pull
+            )
+        fi
+    done
+}
+
 
 # shellcheck disable=SC2034
 {
