@@ -12,6 +12,18 @@ for dotfile in "$HOME/.git-prompt.sh" "$HOME/.git-completion.sh" "$HOME/.dockerf
   fi
 done
 
+if [[ -f /usr/local/src/z5.stdlib/sh/importer ]]; then
+    source /usr/local/src/z5.stdlib/sh/importer
+    import errcho
+    berrcho "Z5 stdlib available"
+    import docker.cli.tools
+    import docker.aliases
+    import gittools
+    import portstools
+else
+    echo "Z5 stdlib not available" >&2
+fi
+
 export PATH=$PATH:$HOME/bin
 
 # Note: PS1 and umask are already set in /etc/profile. You should not
@@ -83,63 +95,6 @@ alias rm~="find * -type f -name '*~' -print0 | xargs -0 rm"
 alias st='stat -c "%A (%a) %8s %.19y %n"'
 
 alias tree='tree --charset=ASCII'
-
-git-new-empty-repo () {
-    echo "git-new-empty-repo is broken, but useful" >&2
-    exit 1
-
-    mkdir "$1"
-
-    (
-        cd "$1" || return $?
-        git init
-    )
-
-    git clone --bare "$1" "$1.git"
-    scp -r "$1.git" dave@clyde:/srv/git
-    rm -r "$1.git"
-
-    (
-        cd "$1" || return $?
-        git remote add origin dave@clyde:"/srv/git/$1.git"
-    )
-}
-
-git-cmp-remote () {
-    git fetch origin master
-    git diff --summary FETCH_HEAD
-}
-
-git3 () {
-    local logmsg; logmsg=${1-No log message supplied}
-    git add .               || return $?
-    git commit -m "$logmsg" || return $?
-    git push origin master  || return $?
-}
-
-git3- () {
-    local logmsg; logmsg=${1-No log message supplied}
-    for d in "$PWD"/*; do
-        if [[ -d "$d" ]]; then
-            (
-                cd "$d" || return 1
-                echo "Committing $d" >&2
-                git3 "$logmsg"
-            )
-        fi
-    done
-}
-
-gitp- () {
-    for d in "$PWD"/*; do
-        if [[ -d "$d" ]]; then
-            (
-                cd "$d" || return 1
-                git pull
-            )
-        fi
-    done
-}
 
 
 # shellcheck disable=SC2034
