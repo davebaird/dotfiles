@@ -5,19 +5,23 @@
 # shellcheck disable=SC2046
 [[ $EUID != 0 ]] && [[ -d ~/perl5 ]] && eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 
-for dotfile in "$HOME/.git-prompt.sh" "$HOME/.git-completion.sh" "$HOME/.dockerfunc"; do
-  if [[ -f $dotfile ]] && [[ -r $dotfile ]]; then
+for dotfile in "$HOME/.git-prompt.sh" "$HOME/.git-completion.sh"; do
+  if [[ -e $dotfile ]]; then
         # shellcheck source=/dev/null
 	    source "$dotfile"
   fi
 done
 
-if [[ -f /usr/local/src/z5.stdlib/sh/importer ]]; then
-    source /usr/local/src/z5.stdlib/sh/importer
+Z5_STDLIB=/usr/local/src/z5.stdlib
+
+if [[ -f "$Z5_STDLIB/sh/importer" ]]; then
+    # shellcheck source=/usr/local/src/z5.stdlib/sh/importer
+    source "$Z5_STDLIB/sh/importer"
+    export Z5_STDLIB
     import errcho
-    berrcho "Z5 stdlib available"
+    berrcho "Z5 stdlib available at $Z5_STDLIB"
     import docker.cli.tools
-    import docker.aliases
+    #import docker.aliases
     import gittools
     import portstools
 else

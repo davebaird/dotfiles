@@ -5,31 +5,35 @@ _err () {
     exit $2
 }
 
-[[ -z "$1" ]] && _err "Need to specify one of: all gitdave git docker bashrc"
+[[ -z "$1" ]] && _err "Need to specify one of: all gitdave git bashrc"
 
 if [[ $1 == all ]]; then
-    dotfiles="bashrc git-prompt.sh git-completion.sh gitconfig dockerfunc "
-elif [[ $1 == gitdave ]]; then 
+    dotfiles="bashrc git-prompt.sh git-completion.sh gitconfig "
+elif [[ $1 == gitdave ]]; then
     dotfiles="bashrc git-prompt.sh git-completion.sh gitconfig"
-elif [[ $1 == git ]]; then 
+elif [[ $1 == git ]]; then
     dotfiles="bashrc git-prompt.sh git-completion.sh"
-elif [[ $1 == docker ]]; then 
-    dotfiles="bashrc dockerfunc"
 elif [[ $1 == bashrc ]]; then
     dotfiles="bashrc"
 fi
 
-for dotfile in $dotfiles; do 
+for dotfile in $dotfiles; do
+    if [[ -L "$HOME/.$dotfile" ]]; then
+        rm -f "$HOME/.$dotfile"
+    fi
+
     if [[ -f "$HOME/.$dotfile" ]] && [[ -r "$HOME/.$dotfile" ]]; then
         ts=$(date +"%Y-%m-%d_%H-%M-%S")
         mv "$HOME/.$dotfile" "$HOME/.$dotfile.$ts" || _err "Couldn't mv $HOME/.$dotfile $HOME/.$dotfile.$ts: $?" $?
     fi
 
-    cp "$dotfile" "$HOME/.$dotfile" || _err "Couldn't cp $dotfile $HOME/.$dotfile: $?"
-    chmod 644 "$HOME/.$dotfile"
-done 
+    #cp "$dotfile" "$HOME/.$dotfile" || _err "Couldn't cp $dotfile $HOME/.$dotfile: $?"
+    dir=$(readlink --canonicalize "$(dirname "$0")")
+    ln -s "$dir/$dotfile" "$HOME/.$dotfile"
+    #chmod 644 "$HOME/.$dotfile"
+done
 
-echo "REMEMBER TO LOG OUT AND BACK IN FOR UPDATES TO TAKE EFFECT"
+echo "REMEMBER TO LOG OUT AND BACK IN FOR UPDATES TO TAKE EFFECT" >&2
 
 [[ $EUID == 0 ]] && exit 0
 
