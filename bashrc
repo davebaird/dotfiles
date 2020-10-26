@@ -18,8 +18,12 @@ if [[ -f "$Z5_STDLIB/sh/importer" ]]; then
     # shellcheck source=/usr/local/src/z5.stdlib/sh/importer
     source "$Z5_STDLIB/sh/importer"
     export Z5_STDLIB
-    import errcho
-    berrcho "Z5 stdlib available at $Z5_STDLIB"
+    if [[ -n $TERM ]]; then
+        import errcho
+        berrcho "Z5 stdlib available at $Z5_STDLIB"
+    else
+        echo "Z5 stdlib available at $Z5_STDLIB" >&2
+    fi
     import docker.cli.tools
     #import docker.aliases
     import gittools
