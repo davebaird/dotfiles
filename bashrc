@@ -12,37 +12,6 @@ for dotfile in "$HOME/.git-prompt.sh" "$HOME/.git-completion.sh"; do
   fi
 done
 
-Z5_STDLIB=/usr/local/src/z5.stdlib
-
-if [[ -f "$Z5_STDLIB/sh/importer" ]]; then
-    # shellcheck source=/usr/local/src/z5.stdlib/sh/importer
-    source "$Z5_STDLIB/sh/importer"
-    export Z5_STDLIB
-    if [[ -n $TERM ]]; then
-        import errcho
-        berrcho "Z5 stdlib available at $Z5_STDLIB"
-    else
-        echo "Z5 stdlib available at $Z5_STDLIB" >&2
-    fi
-    import docker.cli.tools
-    #import docker.aliases
-    import gittools
-    import portstools
-else
-    echo "Z5 stdlib not available" >&2
-fi
-
-export PATH=$PATH:$HOME/bin
-
-# Note: PS1 and umask are already set in /etc/profile. You should not
-# need this unless you want different defaults for root.
-# PS1='${debian_chroot:+($debian_chroot)}\h:\w\$ '
-# umask 022
-
-export VISUAL=vi
-
-export HISTIGNORE="&:bg:fg:ll:h:hg:.."
-
 # shellcheck disable=SC2034
 {
 # Define some colors first:
@@ -59,6 +28,33 @@ GRAY="\[\033[1;30m\]"
 NC='\e[0m'              # No Color
 COLOUROFF='\033[0m'
 }
+
+Z5_STDLIB=/usr/local/src/z5.stdlib
+
+if [[ -f "$Z5_STDLIB/sh/importer" ]]; then
+    # shellcheck source=/usr/local/src/z5.stdlib/sh/importer
+    source "$Z5_STDLIB/sh/importer"
+    export Z5_STDLIB
+    import errcho
+    import docker.cli.tools
+    #import docker.aliases
+    import gittools
+    import portstools
+#     becho "Z5 stdlib available at $Z5_STDLIB (TERM: $TERM)"
+# else
+#     echo "Z5 stdlib not available"
+fi
+
+export PATH=$PATH:$HOME/bin
+
+# Note: PS1 and umask are already set in /etc/profile. You should not
+# need this unless you want different defaults for root.
+# PS1='${debian_chroot:+($debian_chroot)}\h:\w\$ '
+# umask 022
+
+export VISUAL=vi
+
+export HISTIGNORE="&:bg:fg:ll:h:hg:.."
 
 # Are we root?
 if [ $UID -eq 0 ]; then
