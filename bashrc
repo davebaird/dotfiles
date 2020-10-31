@@ -35,14 +35,8 @@ if [[ -f "$Z5_STDLIB/sh/importer" ]]; then
     # shellcheck source=/usr/local/src/z5.stdlib/sh/importer
     source "$Z5_STDLIB/sh/importer"
     export Z5_STDLIB
-    import errcho
-    import docker.cli.tools
-    # #import docker.aliases
     import gittools
-    import portstools
-    berrcho "Z5 stdlib available at $Z5_STDLIB (TERM: $TERM)"
-else
-    echo "Z5 stdlib not available"
+    import docker.cli.tools
 fi
 
 export PATH=$PATH:$HOME/bin
