@@ -2,6 +2,9 @@
 # shellcheck shell=bash
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
+export LANGUAGE="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
 # shellcheck disable=SC2046
 [[ $EUID != 0 ]] && [[ -d ~/perl5 ]] && eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 
@@ -37,6 +40,10 @@ if [[ -f "$Z5_STDLIB/sh/importer" ]]; then
     export Z5_STDLIB
     import gittools
     import docker.cli.tools
+    import pathtools
+
+    PATH.add /usr/local/src/k2.srv/bin
+    PATH.add "$HOME/code/newspaper3k/bin"
 fi
 
 export PATH=$PATH:$HOME/bin
