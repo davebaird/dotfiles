@@ -17,6 +17,8 @@ elif [[ $1 == bashrc ]]; then
     dotfiles="bashrc"
 fi
 
+dir=$(readlink --canonicalize "$(dirname "$0")")
+
 for dotfile in $dotfiles; do
     if [[ -L "$HOME/.$dotfile" ]]; then
         rm -f "$HOME/.$dotfile"
@@ -28,7 +30,7 @@ for dotfile in $dotfiles; do
     fi
 
     #cp "$dotfile" "$HOME/.$dotfile" || _err "Couldn't cp $dotfile $HOME/.$dotfile: $?"
-    dir=$(readlink --canonicalize "$(dirname "$0")")
+
     ln -s "$dir/$dotfile" "$HOME/.$dotfile"
     #chmod 644 "$HOME/.$dotfile"
 done
@@ -39,4 +41,4 @@ echo "REMEMBER TO LOG OUT AND BACK IN FOR UPDATES TO TAKE EFFECT" >&2
 
 groups | grep sudo > /dev/null 2>&1 || exit 0
 
-./setup-cpanm
+"$dir"/setup-cpanm

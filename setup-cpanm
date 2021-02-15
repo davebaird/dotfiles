@@ -3,11 +3,26 @@ set -e
 
 # https://www.linode.com/docs/development/perl/manage-cpan-modules-with-cpan-minus/
 
-sudo apt-get update
-sudo apt-get install curl build-essential libssl-dev
+if ((EUID == 0))
+then
+    apt-get update
+    apt-get install curl build-essential libssl-dev
+else
+    if [[ $HOME != /home/$USER ]]
+    then
+        echo "Homedir not correctly set (got homedir '$HOME' for user '$USER')" >&2
+        exit 29
+    fi
+fi
 
+echo "USER: $USER"
+echo "HOME: $HOME"
+echo "HOMEDIR: $HOMEDIR"
+
+set -x
 curl -L https://cpanmin.us | perl - --sudo App::cpanminus
 
 cpanm --self-upgrade --sudo
 
 cpanm --local-lib=~/perl5 local::lib
+set +x
