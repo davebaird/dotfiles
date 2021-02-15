@@ -32,9 +32,19 @@ NC='\e[0m'              # No Color
 COLOUROFF='\033[0m'
 }
 
-Z5_STDLIB=/usr/local/src/z5.stdlib
+if [[ -d /usr/local/src/z5.stdlib ]]
+then
+    Z5_STDLIB=/usr/local/src/z5.stdlib
+elif [[ -d $HOME/code/z5.stdlib ]]
+then
+    # for dave on dev
+    Z5_STDLIB=$HOME/code/z5.stdlib
+else
+    Z5_STDLIB=
+fi
 
-if [[ -f "$Z5_STDLIB/sh/importer" ]]; then
+if [[ -f "$Z5_STDLIB/sh/importer" ]]
+then
     # shellcheck source=/usr/local/src/z5.stdlib/sh/importer
     source "$Z5_STDLIB/sh/importer"
     export Z5_STDLIB
