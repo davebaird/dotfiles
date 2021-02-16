@@ -13,16 +13,20 @@ else
         echo "Homedir not correctly set (got homedir '$HOME' for user '$USER')" >&2
         exit 29
     fi
+
+    squiggledir="$(eval echo "~$USER")"
+    if [[ $squiggledir != /home/$USER ]]
+    then
+        echo "~ not correctly set (got ~ '$squiggledir' for user '$USER')" >&2
+        exit 30
+    fi
 fi
 
 echo "USER: $USER"
 echo "HOME: $HOME"
-echo "HOMEDIR: $HOMEDIR"
 
-set -x
 curl -L https://cpanmin.us | perl - --sudo App::cpanminus
 
 cpanm --self-upgrade --sudo
 
 cpanm --local-lib=~/perl5 local::lib
-set +x
