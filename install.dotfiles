@@ -19,20 +19,21 @@ fi
 
 dir=$(readlink --canonicalize "$(dirname "$0")")
 
-for dotfile in $dotfiles; do
-    if [[ -L "$HOME/.$dotfile" ]]; then
-        rm -f "$HOME/.$dotfile"
-    fi
+# dev machine - somewhat ugly, but this ensures updates are available to the dev user
+# without having to run any install script
+[[ -d "$HOME"/code/dotfiles ]] && dir="$HOME"/code/dotfiles
 
-    if [[ -f "$HOME/.$dotfile" ]] && [[ -r "$HOME/.$dotfile" ]]; then
+for dotfile in $dotfiles
+do
+    [[ -L "$HOME/.$dotfile" ]] && rm -f "$HOME/.$dotfile"
+
+    if [[ -f "$HOME/.$dotfile" ]]
+    then
         ts=$(date +"%Y-%m-%d_%H-%M-%S")
         mv "$HOME/.$dotfile" "$HOME/.$dotfile.$ts" || _err "Couldn't mv $HOME/.$dotfile $HOME/.$dotfile.$ts: $?" $?
     fi
 
-    #cp "$dotfile" "$HOME/.$dotfile" || _err "Couldn't cp $dotfile $HOME/.$dotfile: $?"
-
     ln -s "$dir/$dotfile" "$HOME/.$dotfile"
-    #chmod 644 "$HOME/.$dotfile"
 done
 
 echo "REMEMBER TO LOG OUT AND BACK IN FOR UPDATES TO TAKE EFFECT" >&2
