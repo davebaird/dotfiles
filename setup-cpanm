@@ -25,8 +25,12 @@ fi
 echo "USER: $USER"
 echo "HOME: $HOME"
 
+
+which cpanm > /dev/null && return 0
+# can't re-run this for admin user, can't figure out how to make it work
 curl -L https://cpanmin.us | perl - --sudo App::cpanminus
 
 cpanm --self-upgrade --sudo
 
 cpanm --local-lib=~/perl5 local::lib
+
