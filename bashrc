@@ -104,6 +104,11 @@ alias st='stat -c "%A (%a) %8s %.19y %n"'
 
 alias tree='tree --charset=ASCII'
 
+# https://shallowsky.com/blog/linux/x-selection.html
+alias primary2clip='xsel -p | xsel -i -b'
+alias p2c='xsel -p | xsel -i -b'
+alias clip2primary='xsel -b | xsel -i -p'
+
 
 # shellcheck disable=SC2034
 {
