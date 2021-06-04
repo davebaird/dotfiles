@@ -47,9 +47,12 @@ if [[ -f "$Z5_STDLIB/sh/importer" ]]; then
 
     PATH.add /usr/local/src/k2.srv/bin
     PATH.add "$HOME/code/newspaper3k/bin"
+    PATH.add "$HOME/code/z5.igbot/bin"
 fi
 
-export PATH=$PATH:$HOME/bin
+export PATH=$PATH:$HOME/bin:$HOME/android-studio/bin:$HOME/Android/Sdk/platform-tools:$HOME/.local/bin:$HOME/code/z5.igbot2/bin
+
+export PYTHONPATH=$HOME/code/Insomniac:$HOME/code/instaloader:$HOME/code/GramAddict:$HOME/code/instagrapi:$PYTHONPATH
 
 # Note: PS1 and umask are already set in /etc/profile. You should not
 # need this unless you want different defaults for root.
@@ -145,13 +148,13 @@ function __prompt_command() {
         __git_ps1 "[\$(date +%H:%M)] [$PROMPTCOLOUR\u@\h$COLOUROFF]: \w" "\n$ERRSTR : $SYM "
     fi
 
-    if [ "$TERM_PROGRAM" = "vscode" ]; then
+    if [ "$TERM_PROGRAM" = "vscodeXX" ]; then
         if [ $_err != 0 ]; then
             ERRSTR="[$RED** $_err **$COLOUROFF] "
         else
             ERRSTR=""
         fi
-        PS1="${ERRSTR}${SYM} "
+        PS1="${ERRSTR}\w: ${SYM} "
     fi
 }
 
